@@ -1,4 +1,4 @@
-# Artists Model and Repository Classes Design Recipe
+# Albums Model and Repository Classes Design Recipe
 
 _Copy this recipe template to design and implement Model and Repository classes for a database table._
 
@@ -13,7 +13,7 @@ Otherwise, [follow this recipe to design and create the SQL schema for your tabl
 ```
 # EXAMPLE
 
-Table: students
+Table: albums
 
 Columns:
 id | name | cohort_name
@@ -35,20 +35,20 @@ If seed data is provided (or you already created it), you can skip this step.
 -- so we can start with a fresh state.
 -- (RESTART IDENTITY resets the primary key)
 
-TRUNCATE TABLE artists RESTART IDENTITY; -- replace with your own table name.
+TRUNCATE TABLE albums RESTART IDENTITY; -- replace with your own table name.
 
 -- Below this line there should only be `INSERT` statements.
 -- Replace these statements with your own seed data.
 
-INSERT INTO artists (name, genre) VALUES('Aqua', 'Dance-Pop');
-INSERT INTO artists (name, genre) VALUES('ABBA', 'Pop');
+INSERT INTO albums (title, release_year) VALUES('Doolittle', '1989');
+INSERT INTO albums (title, release_year) VALUES('Waterloo', '1974');
 ```
 
 Run this SQL file on the database to truncate (empty) the table, and insert the seed data. Be mindful of the fact any existing records in the table will be deleted.
 
 ```bash
 psql -h 127.0.0.1 your_database_name < seeds_{table_name}.sql
-e.g psql -h 127.0.0.1 music_library_test < spec/seeds_artists.sql
+e.g psql -h 127.0.0.1 music_library_test < spec/seeds_albums.sql
 ```
 
 ## 3. Define the class names
@@ -57,16 +57,16 @@ Usually, the Model class name will be the capitalised table name (single instead
 
 ```ruby
 # EXAMPLE
-# Table name: artists
+# Table name: albums
 
 # Model class
-# (in lib/artist.rb)
-class Artist
+# (in lib/album.rb)
+class Album
 end
 
 # Repository class
-# (in lib/artist_repository.rb)
-class ArtistRepository
+# (in lib/album_repository.rb)
+class AlbumRepository
 end
 ```
 
@@ -76,15 +76,15 @@ Define the attributes of your Model class. You can usually map the table columns
 
 ```ruby
 # EXAMPLE
-# Table name: artists
+# Table name: albums
 
 # Model class
-# (in lib/artist.rb)
+# (in lib/album.rb)
 
-class Artist
+class Album
 
   # Replace the attributes by your own columns.
-  attr_accessor :id, :name, :genre
+  attr_accessor :id, :title, :release_year, :artist_id
 end
 
 # The keyword attr_accessor is a special Ruby feature
@@ -106,18 +106,18 @@ Using comments, define the method signatures (arguments and return value) and wh
 
 ```ruby
 # EXAMPLE
-# Table name: artists
+# Table name: album
 
 # Repository class
-# (in lib/artist_repository.rb)
+# (in lib/album_repository.rb)
 
-class ArtistRepository
+class AlbumRepository
 
   # Selecting all records
   # No arguments
   def all
     # Executes the SQL query:
-    # SELECT id, name, gren FROM artists;
+    # SELECT id, name, gren FROM albums;
 
     # Returns an array of Artist objects.
   end
@@ -135,14 +135,15 @@ These examples will later be encoded as RSpec tests.
 # EXAMPLES
 
 # 1
-# Get all artists
+# Get all albums
 
-repo = ArtistRepository.new
+repo = AlbumRepository.new
 
-artists = repo.all
-artists.length # => 2
-artists.first.id # => '1'
-artists.first.name # => 'Pixies'
+albums = repo.all
+albums.length # => 2
+albums.first.id # => '1'
+albums.first.title # => 'Doolittle'
+albums.first.release.year
  
 # Encode this example as a test.
 
@@ -155,17 +156,17 @@ This is so you get a fresh table contents every time you run the test suite.
 ```ruby
 # EXAMPLE
 
-# file: spec/student_repository_spec.rb
+# file: spec/album_repository_spec.rb
 
-def reset_students_table
-  seed_sql = File.read('spec/seeds_students.sql')
-  connection = PG.connect({ host: '127.0.0.1', dbname: 'students' })
+def reset_albums_table
+  seed_sql = File.read('spec/seeds_albums.sql')
+  connection = PG.connect({ host: '127.0.0.1', dbname: 'music_library_test' })
   connection.exec(seed_sql)
 end
 
-describe StudentRepository do
+describe AlbumRepository do
   before(:each) do 
-    reset_students_table
+    reset_albums_table
   end
 
   # (your tests will go here).
@@ -177,11 +178,3 @@ end
 _After each test you write, follow the test-driving process of red, green, refactor to implement the behaviour._
 
 <!-- BEGIN GENERATED SECTION DO NOT EDIT -->
-
----
-
-**How was this resource?**  
-[😫](https://airtable.com/shrUJ3t7KLMqVRFKR?prefill_Repository=makersacademy%2Fdatabases&prefill_File=resources%2Frepository_class_recipe_template.md&prefill_Sentiment=😫) [😕](https://airtable.com/shrUJ3t7KLMqVRFKR?prefill_Repository=makersacademy%2Fdatabases&prefill_File=resources%2Frepository_class_recipe_template.md&prefill_Sentiment=😕) [😐](https://airtable.com/shrUJ3t7KLMqVRFKR?prefill_Repository=makersacademy%2Fdatabases&prefill_File=resources%2Frepository_class_recipe_template.md&prefill_Sentiment=😐) [🙂](https://airtable.com/shrUJ3t7KLMqVRFKR?prefill_Repository=makersacademy%2Fdatabases&prefill_File=resources%2Frepository_class_recipe_template.md&prefill_Sentiment=🙂) [😀](https://airtable.com/shrUJ3t7KLMqVRFKR?prefill_Repository=makersacademy%2Fdatabases&prefill_File=resources%2Frepository_class_recipe_template.md&prefill_Sentiment=😀)  
-Click an emoji to tell us.
-
-<!-- END GENERATED SECTION DO NOT EDIT -->
