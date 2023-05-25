@@ -91,8 +91,8 @@ end
 # which allows us to set and get attributes on an object,
 # here's an example:
 #
-# student = Student.new
-# student.name = 'Jo'
+# album = Album.new
+# album.name = 'Trompe le Monde'
 # student.name
 ```
 
@@ -117,11 +117,18 @@ class AlbumRepository
   # No arguments
   def all
     # Executes the SQL query:
-    # SELECT id, name, gren FROM albums;
+    # SELECT id, name, release_year, artist_id FROM albums;
 
-    # Returns an array of Artist objects.
+    # Returns an array of Album objects.
   end
 
+    # Select a single record
+    # Given the id in argument(a number)
+
+  def find(id) 
+    # Executes the SQL query:
+    # SELECT id, name, release_year, artist_id FROM albums WHERE id = $1
+  end 
 end
 ```
 
@@ -142,9 +149,28 @@ repo = AlbumRepository.new
 albums = repo.all
 albums.length # => 2
 albums.first.id # => '1'
-albums.first.title # => 'Doolittle'
-albums.first.release.year
- 
+albums.first.title # => 'Trompe le Monde'
+albums.first.release.year # => '1991'
+albums.first.artist_id # => '1'
+
+# 2
+# Get a single album
+
+repo = AlbumRepository.new
+album = repo.find(1)
+album.title # => 'Trompe le Monde' 
+album.release_year # => '1991'
+albums.artist_id # => '1'
+
+#3 
+# Get another single artist 
+
+repo = AlbumRepository.new
+album = repo.find(2)
+album.title # => 'Surfer Rosa'
+album.release_year #=> '1988'
+album.artist_id # => '1'
+
 # Encode this example as a test.
 
 ## 7. Reload the SQL seeds before each test run
