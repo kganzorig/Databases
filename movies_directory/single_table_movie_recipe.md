@@ -77,7 +77,7 @@ CREATE TABLE movies (
 ```bash
 psql -h 127.0.0.1 database_movies < movies_table.sql
 ```
-
+or create it on TablePlus
 <!-- BEGIN GENERATED SECTION DO NOT EDIT -->
 
 ---
